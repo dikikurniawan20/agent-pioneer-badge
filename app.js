@@ -27,6 +27,54 @@
   var mintedCountEl = document.getElementById("mintedCount");
   var contractAddrEl = document.getElementById("contractAddr");
   var wallEl = document.getElementById("wall");
+  var heroMintedEl = document.getElementById("heroMinted");
+  var heroSupplyBarEl = document.getElementById("heroSupplyBar");
+  var nextBadgeEl = document.getElementById("nextBadge");
+  var nextTierEl = document.getElementById("nextTier");
+  var agentPromptEl = document.getElementById("agentPrompt");
+  var copyPromptBtn = document.getElementById("copyPromptBtn");
+  var copyContractBtn = document.getElementById("copyContractBtn");
+  var footerContractAddrEl = document.getElementById("footerContractAddr");
+
+  function tierOf(tokenId) {
+    if (tokenId <= 100) return "Founder";
+    if (tokenId <= 1000) return "Pioneer";
+    return "Agent";
+  }
+
+  function updateSupply(total) {
+    var n = Number(total);
+    if (heroMintedEl) heroMintedEl.textContent = n.toString();
+    if (heroSupplyBarEl) heroSupplyBarEl.style.width = Math.min(100, (n / 10000) * 100) + "%";
+    if (nextBadgeEl) nextBadgeEl.textContent = n >= 10000 ? "Sold out" : "#" + (n + 1);
+    if (nextTierEl) nextTierEl.textContent = n >= 10000 ? "—" : tierOf(n + 1);
+  }
+
+  function copyText(text, btn, doneLabel) {
+    function done() {
+      if (!btn) return;
+      var orig = btn.textContent;
+      btn.textContent = doneLabel;
+      setTimeout(function () { btn.textContent = orig; }, 2000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+    } else {
+      fallbackCopy(text);
+      done();
+    }
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (e) { /* clipboard unavailable */ }
+    document.body.removeChild(ta);
+  }
 
   var provider = null; // ethers BrowserProvider (user wallet)
   var signer = null;
@@ -55,6 +103,16 @@
     loadWall();
     connectBtn.addEventListener("click", connect);
     mintBtn.addEventListener("click", mint);
+    if (copyPromptBtn && agentPromptEl) {
+      copyPromptBtn.addEventListener("click", function () {
+        copyText(agentPromptEl.textContent, copyPromptBtn, "Copied!");
+      });
+    }
+    if (copyContractBtn && footerContractAddrEl) {
+      copyContractBtn.addEventListener("click", function () {
+        copyText(footerContractAddrEl.textContent.trim(), copyContractBtn, "Copied!");
+      });
+    }
     if (window.ethereum) {
       window.ethereum.on("accountsChanged", function (accs) {
         account = accs.length ? accs[0] : null;
@@ -66,10 +124,11 @@
   }
 
   async function refreshMintedCount() {
-    if (!badgeRead) { mintedCountEl.textContent = "—"; return; }
+    if (!badgeRead) { mintedCountEl.textContent = "—"; updateSupply(0); return; }
     try {
       var n = await badgeRead.totalMinted();
       mintedCountEl.textContent = n.toString();
+      updateSupply(n);
     } catch (e) { mintedCountEl.textContent = "—"; }
   }
 
@@ -119,6 +178,7 @@
       var minted = await badge.hasMinted(account);
       var total = await badge.totalMinted();
       mintedCountEl.textContent = total.toString();
+      updateSupply(total);
       if (bal === 0n) {
         setStatus("Connected as " + short(account) + ". This wallet holds no Agent ID, so it cannot mint a badge.");
         mintBtn.disabled = true;

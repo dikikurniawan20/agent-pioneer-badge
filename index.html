@@ -9,8 +9,13 @@
 </head>
 <body>
 <header class="hero">
+  <p class="eyebrow">For Agent ID holders · Free to mint</p>
   <h1>Agent Pioneer Badge</h1>
   <p class="tagline">A free keepsake for Agent ID holders.<br>One wallet. One badge. Free forever.</p>
+  <div class="supply">
+    <div class="supply-numbers"><span id="heroMinted">—</span> / 10,000 minted</div>
+    <div class="supply-bar"><div id="heroSupplyBar" class="supply-fill" style="width:0%"></div></div>
+  </div>
   <div class="tier-strip">
     <span class="tier gold">#1–100 Founder</span>
     <span class="tier silver">#101–1,000 Pioneer</span>
@@ -19,20 +24,96 @@
 </header>
 
 <main>
-  <section id="mint" class="card">
+  <section id="mint" class="card mint-card">
     <h2>Mint your badge</h2>
     <p class="muted">Minting is free. You only pay the network gas fee. The contract checks
     on-chain that your wallet holds an Agent ID — no sign-up, no email, no seed phrase,
     nothing to upload. Your wallet asks you to confirm every transaction; nothing is
     ever sent without your approval.</p>
-    <div id="status" class="status">Not connected.</div>
-    <div class="actions">
-      <button id="connectBtn">Connect wallet</button>
-      <button id="mintBtn" disabled>Mint my free badge</button>
+    <div class="mint-grid">
+      <div class="mint-main">
+        <div id="status" class="status">Not connected.</div>
+        <div class="actions">
+          <button id="connectBtn">Connect wallet</button>
+          <button id="mintBtn" disabled>Mint my free badge</button>
+        </div>
+        <p id="txInfo" class="muted"></p>
+      </div>
+      <div class="mint-side">
+        <div class="stat"><span class="stat-label">Minted so far</span><span class="stat-value"><span id="mintedCount">—</span> / 10,000</span></div>
+        <div class="stat"><span class="stat-label">Next badge</span><span class="stat-value" id="nextBadge">#—</span></div>
+        <div class="stat"><span class="stat-label">Next tier</span><span class="stat-value" id="nextTier">—</span></div>
+        <div class="stat"><span class="stat-label">Price</span><span class="stat-value">Free + gas</span></div>
+        <div class="stat"><span class="stat-label">Per wallet</span><span class="stat-value">1 badge</span></div>
+      </div>
     </div>
-    <p id="txInfo" class="muted"></p>
-    <p class="muted small">Contract: <code id="contractAddr">not deployed yet</code> ·
-    <span id="mintedCount">—</span> / 10,000 minted</p>
+    <p class="muted small">Contract: <code id="contractAddr">not deployed yet</code></p>
+  </section>
+
+  <section class="card">
+    <h2>Tiers</h2>
+    <p class="muted">Your tier is decided by your mint number — the earlier you mint, the rarer your tier.</p>
+    <div class="tier-cards">
+      <div class="tier-card gold">
+        <div class="tier-card-name">Founder</div>
+        <div class="tier-card-range">#1 – #100</div>
+        <p>The first 100 badges ever minted. Gold artwork, for the earliest pioneers.</p>
+      </div>
+      <div class="tier-card silver">
+        <div class="tier-card-name">Pioneer</div>
+        <div class="tier-card-range">#101 – #1,000</div>
+        <p>The next 900 badges. Silver artwork, for the early wave of Agent ID holders.</p>
+      </div>
+      <div class="tier-card bronze">
+        <div class="tier-card-name">Agent</div>
+        <div class="tier-card-range">#1,001 – #10,000</div>
+        <p>Every badge after that. Bronze artwork, for every Agent ID holder who joins.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>How to mint</h2>
+    <p class="muted">Two ways to get your badge. Pick the one that suits you.</p>
+    <div class="paths">
+      <div class="path">
+        <h3>Manual — mint it yourself</h3>
+        <ol>
+          <li>Connect your wallet above (injected provider — the wallet you already use).</li>
+          <li>The site reads your Agent ID balance on-chain. Nothing is signed for this check.</li>
+          <li>If you hold an Agent ID and have not minted, press Mint — your wallet shows the transaction for you to confirm.</li>
+          <li>Your badge appears on the wall below and in your wallet. That is all.</li>
+        </ol>
+      </div>
+      <div class="path">
+        <h3>With your AI agent</h3>
+        <ol>
+          <li>Copy the prompt in the section below.</li>
+          <li>Paste it to your AI agent — the one that can transact from your wallet.</li>
+          <li>Your agent checks your Agent ID, prepares the mint, and shows you the transaction first.</li>
+          <li>You approve it, the agent sends it, and reports your badge number and transaction hash.</li>
+        </ol>
+      </div>
+    </div>
+    <p class="muted small">Privacy: this site stores nothing on a server. It only talks to the chain through your wallet and a public read-only node. It never asks for your seed phrase, private key, or password — anyone who does is a scam.</p>
+  </section>
+
+  <section class="card" id="agent-prompt">
+    <h2>Mint with your AI agent</h2>
+    <p class="muted">Give this prompt to your AI agent and it will mint the badge for you. The agent
+    must show you the transaction and get your approval before sending anything.</p>
+    <div class="prompt-box">
+      <pre><code id="agentPrompt">Mint an Agent Pioneer Badge NFT for me.
+
+Steps:
+1. Network: BSC mainnet (chain ID 56).
+2. Badge contract: 0xdf72e80ec7d3266d754050391508fba914168717. Call its mint() function exactly once.
+3. Before minting, check that my wallet holds an Agent ID: call balanceOf(my address) on the Agent ID contract 0x60b9262456de011f7d15a54cdd8c48baaa8b022f. It must be greater than 0, or the mint will fail.
+4. The mint itself is free — I only pay the network gas fee. One badge per wallet, max supply 10,000.
+5. Show me the transaction details and confirm with me BEFORE you send it. Do not send anything without my approval.
+6. After it confirms, report my badge token ID and the transaction hash.</code></pre>
+      <button id="copyPromptBtn" class="secondary">Copy prompt</button>
+    </div>
   </section>
 
   <section class="card">
@@ -53,19 +134,38 @@
   </section>
 
   <section class="card">
-    <h2>How it works</h2>
-    <ol>
-      <li>Connect your wallet (injected provider — the wallet you already use).</li>
-      <li>The site reads your Agent ID balance on-chain. Nothing is signed for this check.</li>
-      <li>If you hold an Agent ID and have not minted, press Mint — your wallet shows the transaction for you to confirm.</li>
-      <li>Your badge appears here and in your wallet. That is all.</li>
-    </ol>
-    <p class="muted small">Privacy: this site stores nothing on a server. It only talks to the chain through your wallet and a public read-only node. It never asks for your seed phrase, private key, or password — anyone who does is a scam.</p>
+    <h2>FAQ</h2>
+    <details>
+      <summary>Is it really free?</summary>
+      <p>Yes. The mint function costs nothing — you only pay the network gas fee for the transaction. There is no mint price, no hidden fee, and no payment to anyone.</p>
+    </details>
+    <details>
+      <summary>How many badges can I mint?</summary>
+      <p>One per wallet. The contract enforces it on-chain — a second mint from the same wallet will fail.</p>
+    </details>
+    <details>
+      <summary>What do I need to mint?</summary>
+      <p>A wallet that holds an Agent ID. The contract checks your Agent ID balance on-chain before it lets you mint. If you do not hold one, the mint will fail.</p>
+    </details>
+    <details>
+      <summary>What is the badge for?</summary>
+      <p>It is a commemorative keepsake — a record that you held an Agent ID in the early days. It has no utility, no promised returns, and no airdrop attached to it.</p>
+    </details>
+    <details>
+      <summary>Where is the contract?</summary>
+      <p>On BSC mainnet at <a href="https://bscscan.com/address/0xdf72e80ec7d3266d754050391508fba914168717">0xdf72e80ec7d3266d754050391508fba914168717</a>. The source is open and verified on-chain.</p>
+    </details>
   </section>
 </main>
 
 <footer>
   <p class="muted small">Agent Pioneer Badge — built for the Agent ID hackathon. Contract source is open and verified on-chain. This is a commemorative collectible, not a financial product.</p>
+  <p class="footer-contract">Contract: <code id="footerContractAddr">0xdf72e80ec7d3266d754050391508fba914168717</code>
+    <button id="copyContractBtn" class="secondary small-btn">Copy address</button></p>
+  <p class="footer-links">
+    <a href="https://bscscan.com/address/0xdf72e80ec7d3266d754050391508fba914168717">View contract on BscScan</a> ·
+    <a href="https://github.com/dikikurniawan20/agent-pioneer-badge">Source on GitHub</a>
+  </p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
