@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Pioneer Badge — a free keepsake for Agent ID holders</title>
+<meta name="description" content="A free commemorative NFT for Agent ID holders. One wallet, one badge, free forever. No returns promised, no airdrop — a keepsake for the pioneers.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="hero">
+  <h1>Agent Pioneer Badge</h1>
+  <p class="tagline">A free keepsake for Agent ID holders.<br>One wallet. One badge. Free forever.</p>
+  <div class="tier-strip">
+    <span class="tier gold">#1–100 Founder</span>
+    <span class="tier silver">#101–1,000 Pioneer</span>
+    <span class="tier bronze">#1,001–10,000 Agent</span>
+  </div>
+</header>
+
+<main>
+  <section id="mint" class="card">
+    <h2>Mint your badge</h2>
+    <p class="muted">Minting is free. You only pay the network gas fee. The contract checks
+    on-chain that your wallet holds an Agent ID — no sign-up, no email, no seed phrase,
+    nothing to upload. Your wallet asks you to confirm every transaction; nothing is
+    ever sent without your approval.</p>
+    <div id="status" class="status">Not connected.</div>
+    <div class="actions">
+      <button id="connectBtn">Connect wallet</button>
+      <button id="mintBtn" disabled>Mint my free badge</button>
+    </div>
+    <p id="txInfo" class="muted"></p>
+    <p class="muted small">Contract: <code id="contractAddr">not deployed yet</code> ·
+    <span id="mintedCount">—</span> / 10,000 minted</p>
+  </section>
+
+  <section class="card">
+    <h2>What this is — honestly</h2>
+    <ul>
+      <li>A <strong>commemorative</strong> NFT. It marks that you held an Agent ID in the early days.</li>
+      <li>It is <strong>not</strong> an investment. No returns, no passive income, no airdrop is promised — ever.</li>
+      <li>One badge per wallet, enforced by the contract. Tiers come from your mint number: the first 100 are Founders.</li>
+      <li>The artwork is generated on-chain (SVG) and lives entirely in the contract — no external server can take it down.</li>
+      <li>The contract is open source and the owner has no powers over your badge — no pause, no freeze, no fees, no changes after deploy.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Wall of Agents</h2>
+    <p class="muted">Every badge ever minted, latest first.</p>
+    <div id="wall" class="wall"><p class="muted">Loading…</p></div>
+  </section>
+
+  <section class="card">
+    <h2>How it works</h2>
+    <ol>
+      <li>Connect your wallet (injected provider — the wallet you already use).</li>
+      <li>The site reads your Agent ID balance on-chain. Nothing is signed for this check.</li>
+      <li>If you hold an Agent ID and have not minted, press Mint — your wallet shows the transaction for you to confirm.</li>
+      <li>Your badge appears here and in your wallet. That is all.</li>
+    </ol>
+    <p class="muted small">Privacy: this site stores nothing on a server. It only talks to the chain through your wallet and a public read-only node. It never asks for your seed phrase, private key, or password — anyone who does is a scam.</p>
+  </section>
+</main>
+
+<footer>
+  <p class="muted small">Agent Pioneer Badge — built for the Agent ID hackathon. Contract source is open and verified on-chain. This is a commemorative collectible, not a financial product.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

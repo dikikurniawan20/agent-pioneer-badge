@@ -1,0 +1,28 @@
+:root { --bg: #0e0f13; --card: #171922; --text: #f2f2f2; --muted: #a8adb8; --accent: #e8b64c; --line: #2a2d3a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.55; }
+.hero { text-align: center; padding: 56px 20px 32px; background: linear-gradient(160deg, #1b1405, #0e0f13 60%); }
+.hero h1 { margin: 0 0 8px; font-size: 2.4rem; letter-spacing: 1px; }
+.tagline { color: var(--muted); font-size: 1.15rem; margin: 0 0 20px; }
+.tier-strip { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.tier { padding: 6px 14px; border-radius: 999px; font-size: .9rem; border: 1px solid var(--line); }
+.tier.gold { color: #FFD700; border-color: #FFD70066; }
+.tier.silver { color: #C0C0C0; border-color: #C0C0C066; }
+.tier.bronze { color: #CD7F32; border-color: #CD7F3266; }
+main { max-width: 860px; margin: 0 auto; padding: 0 16px 40px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-top: 20px; }
+.card h2 { margin-top: 0; }
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+.status { background: #101218; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin: 14px 0; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+button { background: var(--accent); color: #1a1405; border: none; border-radius: 10px; padding: 12px 20px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.secondary { background: transparent; color: var(--text); border: 1px solid var(--line); }
+code { background: #101218; padding: 2px 6px; border-radius: 6px; font-size: .9em; }
+.wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 12px; }
+.badge-card { background: #101218; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.badge-card img { width: 100%; display: block; }
+.badge-card .meta { padding: 8px 10px; font-size: .85rem; }
+.badge-card .meta .tier { font-weight: 700; }
+footer { text-align: center; padding: 0 20px 32px; }
